@@ -26,6 +26,29 @@
         if(mysqli_query(conecta(), $sql)) {
             echo "Registro inserido com sucesso!";
         } else {
-            echo "Erro ao inserir";
+            echo "Erro ao inserir!";
+        }
+    }
+
+    function excluir($id) {
+        $sql = "delete from aluno where id = $id;";
+        if(mysqli_query(conecta(), $sql)) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    function editar($id, $nome, $email, $telefone, $cpf) {
+        $sql = "update pessoas set 
+        nome='$nome',
+        email='$email',
+        telefone='$telefone',
+        cpf='$cpf'
+        where idpessoa='$id';";
+        if(mysqli_query(conecta(), $sql)) {
+            echo "Editado com sucesso!";
+        } else {
+            echo "Erro ao editar!";
         }
     }
