@@ -21,34 +21,63 @@
 		return $pessoas;
     }
 
+    function pesquisaId($id) {
+        $sql = "select * from aluno where id = $id;";
+        $consulta = mysqli_query(conecta(), $sql);
+		return mysqli_fetch_assoc($consulta);
+    }
+
     function inserir($nome, $email, $telefone, $cpf) {
         $sql = "insert into aluno (nome, email, telefone, cpf) values ('$nome','$email','$telefone','$cpf');";
         if(mysqli_query(conecta(), $sql)) {
-            echo "Registro inserido com sucesso!";
+            return true;
         } else {
-            echo "Erro ao inserir!";
+            return false;
         }
+    }
+
+    function inserirUser($email, $senha) {
+        $sql = "insert into users (email, senha) values ('$email','$senha');";
+        if(mysqli_query(conecta(), $sql)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function autenticaUser($email, $senha) {
+        session_start();
+        $sql = "select * from users where email='$email' and senha = '$senha' LIMIT 1";
+        $resultado = mysqli_query(conecta(), $sql);
+        if(mysqli_num_rows($resultado) == 1) {
+            $_SESSION['email'] = $_POST['email'];
+            $_SESSION['senha'] = $_POST['senha'];
+            $_SESSION['autenticado'] = true;
+            return true;
+        } else {
+            return false;
+        }        
     }
 
     function excluir($id) {
         $sql = "delete from aluno where id = $id;";
         if(mysqli_query(conecta(), $sql)) {
-            return 1;
+            return true;
         } else {
-            return 0;
+            return false;
         }
     }
 
     function editar($id, $nome, $email, $telefone, $cpf) {
-        $sql = "update pessoas set 
+        $sql = "update aluno set 
         nome='$nome',
         email='$email',
         telefone='$telefone',
         cpf='$cpf'
-        where idpessoa='$id';";
+        where id=$id;";
         if(mysqli_query(conecta(), $sql)) {
-            echo "Editado com sucesso!";
+           return true;
         } else {
-            echo "Erro ao editar!";
+            return false;
         }
     }

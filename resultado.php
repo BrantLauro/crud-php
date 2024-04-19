@@ -1,5 +1,9 @@
+<?php 
+    include("chave.php");
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,35 +20,36 @@
     </style>
 </head>
 <body>
-    <?php include "bd.php"; ?>
     <br>
     <section>
         <h1>Resultado da pesquisa:</h1>
         <?php
-            
+            include "bd.php";
+            include "funcoes.php";
             conecta();
-            if($pessoas =  pesquisaNome($_POST["nome"] ?? "")) {
+            if(@$pessoas =  pesquisaNome($_POST["nome"] ?? "")) {
                 for($i = 0; $i < sizeof($pessoas); $i++) {
                     echo "Nome:  {$pessoas[$i]['nome']}<br>";
                     echo "CPF: {$pessoas[$i]['cpf']}<br>";
                     echo "Email: {$pessoas[$i]['email']}<br>";
                     echo "Telefone: {$pessoas[$i]['telefone']}<br>";
-                    echo "<a href='editar.php?{$pessoas[$i]['id']}'><button>Editar</button></a>
+                    echo "<a href='editar.php?id={$pessoas[$i]['id']}'><button>Editar</button></a>
                     <a href='resultado.php?excluir={$pessoas[$i]['id']}'><button>Excluir</button></a>";
                     echo "<hr><br>";
                 }
             } else {
-                echo "Sem registros!";
+                echo "Sem registros!<br>";
             }
 
             if(isset($_GET["excluir"])) {
-                $string  = excluir($_GET['excluir']);
-                header("Location: index.php");
-                if($string)
-                    echo "<script>alert('Excluido com sucesso!')</script>";
+                $res  = excluir($_GET['excluir']);
+                if($res)
+                    alerta("Excluido com sucesso!");
                 else 
-                    echo "<script>alert('Erro ao excluir!')</script>";
-                    
+                    alerta("Erro ao excluir!");
+                redirect("pesquisa-cadastro.php");
+                fecha();
+                exit();
             }
             fecha();
         ?>
