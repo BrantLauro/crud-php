@@ -38,7 +38,7 @@
                     echo "<hr><br>";
                 }
             } else {
-                echo "Sem registros!<br>";
+                echo "Sem registros!<br><br>";
             }
 
             if(isset($_GET["excluir"])) {
